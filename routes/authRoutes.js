@@ -5,3 +5,5 @@ router.post('/login');
 router.post('/register');
 router.post('/logout');
 router.get('/me');
+
+module.exports = router;
