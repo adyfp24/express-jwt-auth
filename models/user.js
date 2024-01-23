@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      allo
+      allowNull: false
     }
   }, {
     sequelize,
