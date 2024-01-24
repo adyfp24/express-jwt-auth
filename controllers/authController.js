@@ -72,8 +72,21 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+    try {
+        req.user = null; 
+        res.status(200).json({
+            success: true,
+            message: 'Logout sukses',
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+        });
+    }
+};
 
-}
 
 module.exports = {
     register,
