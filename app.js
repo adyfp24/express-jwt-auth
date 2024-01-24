@@ -10,8 +10,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(authRoute);
-app.use('api/',meRoute);
+app.use('/api',authRoute);
+app.use('/api',meRoute);
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)

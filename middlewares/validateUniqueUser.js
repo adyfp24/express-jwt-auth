@@ -4,7 +4,6 @@ const validateUniqueUser = async (req, res, next) => {
     try {
         const { username, email } = req.body;
 
-        // Validasi username
         const usernameExists = await User.findOne({
             where: { username }
         });
@@ -15,7 +14,6 @@ const validateUniqueUser = async (req, res, next) => {
             });
         }
 
-        // Validasi email
         const emailExists = await User.findOne({
             where: { email }
         });
@@ -26,7 +24,6 @@ const validateUniqueUser = async (req, res, next) => {
             });
         }
 
-        // Jika username dan email unik, lanjutkan ke langkah selanjutnya
         next();
     } catch (error) {
         return res.status(500).json({
