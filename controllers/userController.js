@@ -1,6 +1,6 @@
 const User = require('../models').User;
 
-const getMe = (req, res) => {
+const getMe = async (req, res) => {
     try {
         const user = req.user;
 
@@ -10,12 +10,15 @@ const getMe = (req, res) => {
                 message: 'Anda tidak terautentikasi',
             });
         }
+        const id = user.id;
+        const userData = await User.findOne({ where: { id } });
 
         res.status(200).json({
             success: true,
             message: 'Anda telah terautentikasi login',
-            data: user,
+            data: userData,
         });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({

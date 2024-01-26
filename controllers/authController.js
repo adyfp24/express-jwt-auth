@@ -2,15 +2,16 @@ require('dotenv').config();
 const User = require('../models').User;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const expiredTokens = new Set();
 
 const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const hashedPassword = bcrypt.hashSync(password,10)
+        const hashedPassword = bcrypt.hashSync(password, 10)
         const newUser = await User.create({
             username,
             email,
-            password:hashedPassword
+            password: hashedPassword
         });
 
         if (newUser) {
@@ -49,7 +50,7 @@ const login = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (isPasswordValid) {
-            const apiToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+            const apiToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '30m' });
             res.status(200).json({
                 success: true,
                 message: 'Login sukses',
@@ -73,11 +74,18 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        req.user = null; 
+        const user = req.user;
+        if (!user) {
+            res.status(401).json({
+                success: false,
+                message: 'unauthenticated',
+            });
+        }
+        expiredTokens.add(user.id);
         res.status(200).json({
             success: true,
-            message: 'Logout sukses',
-        });
+            message: 'berhasil logout',
+        })
     } catch (error) {
         console.error(error);
         res.status(500).json({

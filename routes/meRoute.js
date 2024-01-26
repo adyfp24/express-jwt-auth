@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/UserController');
-// const { verifyToken } 
+const { verifyToken } = require('../middlewares/verifyJWT')
 
-router.get('/me', userController.getMe);
+router.get('/me', verifyToken, userController.getMe);
 
 module.exports = router;
